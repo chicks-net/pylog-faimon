@@ -22,3 +22,13 @@ logger.info('started')
 
 logger.warning('done')
 ```
+
+## requirements
+
+* python 2.x
+* standard modules `os`, `logging`, and `socket`
+
+## support
+
+Please file [an issue on github](https://github.com/chicks-net/pylog-faimon/issues)
+if you have difficulty.
