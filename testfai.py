@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+"""demonstrate logfai module"""
 
 import logfai
 import logging
@@ -9,16 +10,16 @@ if __name__ == '__main__':
 	logger.setLevel(logging.DEBUG)
 
 	# STDOUT logging
-	ch = logging.StreamHandler()
+	log_stdout = logging.StreamHandler()
 	formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-	ch.setFormatter(formatter)
-	logger.addHandler(ch)
+	log_stdout.setFormatter(formatter)
+	logger.addHandler(log_stdout)
 
 	# FAIMON logging
-	fm = logfai.FaimonHandler(address=(os.environ['monserver'],4711))
+	log_faimon = logfai.FaimonHandler(address=(os.environ['monserver'], 4711))
 	fai_formatter = logging.Formatter('FAIMON: %(name)s - %(levelname)s - %(message)s')
-	fm.setFormatter(fai_formatter)
-	logger.addHandler(fm)
+	log_faimon.setFormatter(fai_formatter)
+	logger.addHandler(log_faimon)
 
 	logger.info('started')
 

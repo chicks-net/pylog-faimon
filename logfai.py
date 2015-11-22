@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+"""python logging module for writing to FAI Project's faimond"""
 
 import logging
 import socket
@@ -22,7 +23,7 @@ class FaimonHandler(logging.Handler):
 
 		self.hostname = address[0]
 		self.port = address[1]
-		super(FaimonHandler,self).__init__()
+		super(FaimonHandler, self).__init__()
 
 #	def close (self):
 #		"""
@@ -42,35 +43,35 @@ class FaimonHandler(logging.Handler):
 		msg = self.format(record) + "\n"
 
 		# send
-		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		s.connect((self.hostname, self.port))
-		s.sendall(msg)
-		s.shutdown(socket.SHUT_WR)
+		sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		sock.connect((self.hostname, self.port))
+		sock.sendall(msg)
+		sock.shutdown(socket.SHUT_WR)
 
 		# dispose socket results
 		while 1:
-			data = s.recv(1024)
+			data = sock.recv(1024)
 			if data == "":
 				break
 			#print "Received:", repr(data)
 		#print "Connection closed."
-		s.close()
+		sock.close()
 
 if __name__ == '__main__':
 	logger = logging.getLogger('faimon_test')
 	logger.setLevel(logging.DEBUG)
 
 	# STDOUT logging
-	ch = logging.StreamHandler()
+	log_stdout = logging.StreamHandler()
 	formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-	ch.setFormatter(formatter)
-	logger.addHandler(ch)
+	log_stdout.setFormatter(formatter)
+	logger.addHandler(log_stdout)
 
 	# FAIMON logging
-	fm = FaimonHandler(address=(os.environ['monserver'],4711))
+	log_faimon = FaimonHandler(address=(os.environ['monserver'], 4711))
 	fai_formatter = logging.Formatter('FAIMON: %(name)s - %(levelname)s - %(message)s')
-	fm.setFormatter(fai_formatter)
-	logger.addHandler(fm)
+	log_faimon.setFormatter(fai_formatter)
+	logger.addHandler(log_faimon)
 
 	logger.info('started')
 
